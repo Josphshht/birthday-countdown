@@ -1,16 +1,16 @@
-/* Fireworks Animation */
+/* Fireworks styling */
 .firework {
     position: absolute;
     width: 6px;
     height: 6px;
     background-color: yellow;
-    animation: fall 1.5s ease-out forwards;
+    animation: fall 2.5s ease-out forwards; /* Increased duration */
 }
 
-/* Animation keyframes for falling effect */
+/* Animation keyframes for falling fireworks */
 @keyframes fall {
     0% {
-        transform: translateY(-100vh) scale(0.2);
+        transform: translateY(-50px) scale(0.2); /* Start slightly below the top */
         opacity: 1;
     }
     70% {
@@ -18,7 +18,7 @@
         opacity: 1;
     }
     100% {
-        transform: translateY(0) scale(1);
+        transform: translateY(calc(100vh + 50px)) scale(1); /* End slightly below the viewport */
         opacity: 0;
     }
 }
