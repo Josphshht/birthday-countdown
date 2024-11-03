@@ -1,0 +1,49 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #222;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+    color: #fff;
+    font-family: 'Pacifico', cursive;
+}
+
+#countdown {
+    font-size: 4em;
+}
+
+.hidden {
+    display: none;
+}
+
+#message {
+    display: none;
+    font-size: 3em;
+    color: #FFD700;
+    animation: fadeIn 2s ease-out forwards;
+}
+
+/* Fireworks Animation */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.firework {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: yellow;
+    animation: explode 1.5s ease-out forwards;
+}
+
+@keyframes explode {
+    from { transform: scale(0.2); opacity: 1; }
+    to { transform: scale(1); opacity: 0; }
+}
