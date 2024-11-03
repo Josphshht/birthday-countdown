@@ -4,8 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Birthday Countdown</title>
+    <!-- Link to Google Fonts for a cursive font -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Basic styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #222;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            color: #fff;
+            font-family: 'Pacifico', cursive;
+        }
+
+        #countdown {
+            font-size: 4em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #message {
+            display: none;
+            font-size: 3em;
+            color: #FFD700;
+            animation: fadeIn 2s ease-out forwards;
+        }
+
+        /* Fireworks styling */
+        .firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: yellow;
+            animation: fall 1.5s ease-out forwards;
+        }
+
+        /* Animation keyframes for falling fireworks */
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) scale(0.2);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(1.5); /* Expand as it falls */
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Animation for the message */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -14,6 +78,49 @@
     </div>
     <!-- Firework sound file -->
     <audio id="fireworkSound" src="firework-sound.mp3"></audio>
-    <script src="script.js"></script>
+    <script>
+        let countdownValue = 10; // Starting countdown value
+        const countdownElement = document.getElementById('countdown');
+        const messageElement = document.getElementById('message');
+        const fireworkSound = document.getElementById('fireworkSound');
+
+        // Countdown function
+        const countdown = setInterval(() => {
+            if (countdownValue > 0) {
+                countdownElement.textContent = countdownValue;
+                countdownValue--;
+            } else {
+                clearInterval(countdown);
+                countdownElement.style.display = 'none';
+                messageElement.classList.remove('hidden');
+                messageElement.style.display = 'block';
+
+                // Play firework sound and create falling fireworks
+                fireworkSound.play();
+                createFireworks();
+            }
+        }, 1000);
+
+        // Fireworks function
+        function createFireworks() {
+            for (let i = 0; i < 30; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework');
+                document.body.appendChild(firework);
+
+                const x = Math.random() * window.innerWidth;
+
+                firework.style.left = `${x}px`;
+                firework.style.top = `0px`; // Start from the top
+
+                firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+
+                // Remove the firework after animation ends
+                firework.addEventListener('animationend', () => {
+                    firework.remove();
+                });
+            }
+        }
+    </script>
 </body>
 </html>
