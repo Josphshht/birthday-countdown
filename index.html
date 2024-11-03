@@ -24,6 +24,12 @@
 
         #countdown {
             font-size: 4em;
+            transform: scale(1); /* Initial scale for zoom effect */
+            transition: transform 0.3s ease; /* Smooth transition for zoom */
+        }
+
+        #countdown.zoom {
+            transform: scale(1.5); /* Zoom-in effect */
         }
 
         .hidden {
@@ -42,22 +48,18 @@
             position: absolute;
             width: 6px;
             height: 6px;
-            background-color: yellow;
-            animation: fall 2.5s ease-out forwards; /* Increased duration */
+            opacity: 1;
+            animation: fall forwards; /* No duration here */
         }
 
         /* Animation keyframes for falling fireworks */
         @keyframes fall {
             0% {
-                transform: translateY(-50px) scale(0.2); /* Start slightly below the top */
-                opacity: 1;
-            }
-            70% {
-                transform: scale(1.5); /* Expand as it falls */
+                transform: translateY(-50px) scale(0.2);
                 opacity: 1;
             }
             100% {
-                transform: translateY(calc(100vh + 50px)) scale(1); /* End slightly below the viewport */
+                transform: translateY(calc(100vh + 50px)) scale(1);
                 opacity: 0;
             }
         }
@@ -71,7 +73,7 @@
 </head>
 <body>
     <div class="container">
-        <div id="countdown">10</div>
+        <div id="countdown">5</div>
         <div id="message" class="hidden">🎉 Happy Birthday! 🎉</div>
     </div>
     <audio id="fireworkSound" src="firework-sound.mp3"></audio>
@@ -93,10 +95,15 @@
 
         if (today.getTime() === targetDate.getTime()) {
             // If today is November 3rd, start the countdown
-            let countdownValue = 10; // Starting countdown value
+            let countdownValue = 5; // Starting countdown value
 
             const countdown = setInterval(() => {
                 if (countdownValue > 0) {
+                    countdownElement.classList.add('zoom'); // Add zoom class
+                    setTimeout(() => {
+                        countdownElement.classList.remove('zoom'); // Remove zoom class
+                    }, 300); // Duration of zoom effect
+
                     countdownElement.textContent = countdownValue;
                     countdownValue--;
                 } else {
@@ -106,7 +113,6 @@
                     messageElement.style.display = 'block';
 
                     // Play firework sound and create falling fireworks
-                    fireworkSound.play();
                     createFireworks();
                 }
             }, 1000);
@@ -120,24 +126,32 @@
 
         // Fireworks function
         function createFireworks() {
-            for (let i = 0; i < 30; i++) {
-                const firework = document.createElement('div');
-                firework.classList.add('firework');
-                document.body.appendChild(firework);
+            fireworkSound.play().catch(error => {
+                console.error("Sound could not be played: ", error);
+            });
+            for (let i = 0; i < 3; i++) { // Create 3 fireworks at a time
+                setTimeout(() => { // Stagger the fireworks
+                    for (let j = 0; j < 10; j++) { // Each firework will have 10 particles
+                        const firework = document.createElement('div');
+                        firework.classList.add('firework');
+                        document.body.appendChild(firework);
 
-                const x = Math.random() * window.innerWidth;
+                        const x = Math.random() * window.innerWidth; // Random horizontal position
+                        const duration = Math.random() * 1.5 + 1; // Random duration between 1s to 2.5s
 
-                firework.style.left = `${x}px`;
-                firework.style.top = `0px`; // Start from the top
+                        firework.style.left = `${x}px`;
+                        firework.style.top = `0px`; // Start from the top
+                        firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                        firework.style.animationDuration = `${duration}s`; // Set random animation duration
 
-                firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-
-                // Remove the firework after animation ends
-                firework.addEventListener('animationend', () => {
-                    firework.remove();
-                });
+                        // Remove the firework after animation ends
+                        firework.addEventListener('animationend', () => {
+                            firework.remove();
+                        });
+                    }
+                }, i * 300); // Stagger by 300ms
             }
         }
     </script>
-</body>
+</body>A
 </html>
